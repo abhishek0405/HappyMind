@@ -46,7 +46,7 @@ Get the report of your mental state and tips to improve your lifestyle!
 Disgust and frustration:
 <p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/disgust.jpeg"></p>
 <br>
-Drowsy
+Drowsy (The sleep  counter reaches 29 indicating drowsiness when eyes are closed)
 <p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/drowsy.jpeg"></p>
 <br>
 Happy
