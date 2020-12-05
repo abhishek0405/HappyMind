@@ -1,4 +1,4 @@
-# Healthy Mind
+﻿# Healthy Mind
 
 ### Inspiration  
 With the COVID-19 lockdown, the work culture across the world has changed a lot. People are working from home and attending classes online and this is going to continue for at least a few more months. Moreover, there are no office timings and people are expected to extend their working hours which leads to a lot of mental pressure. It leads to fatigue, irritation, anger and frustration and these are the factors responsible for mental health issues due to workplace stress. 
@@ -40,6 +40,10 @@ We will work on improving the model accuracy by tweaking some parameters in the 
 - [x] The script starts running and if you want to end the session press ‘q’. It generates a report in the form of a txt file and saves it in your pwd. 
 
 Get the report of your mental state and tips to improve your lifestyle!
+
+###Demo screenshots
+
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/"></p>
 
 ### Built With 
 -	Python
