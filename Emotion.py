@@ -143,7 +143,7 @@ def setup_model():
 def main():
 
     detection_model_path = 'Haarcascades/haarcascade_frontalface_default.xml'
-    emotion_model_path = 'emotionnetworkweights.hdf5'
+    emotion_model_path = 'models/emotionnetworkweights.hdf5'
 
     
     face_detection = cv2.CascadeClassifier(detection_model_path)
