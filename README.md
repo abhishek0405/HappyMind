@@ -41,7 +41,7 @@ We will work on improving the model accuracy by tweaking some parameters in the 
 
 Get the report of your mental state and tips to improve your lifestyle!
 
-###Demo screenshots
+### Demo screenshots
 
 Disgust and frustration:
 <p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/disgust.jpeg"></p>
