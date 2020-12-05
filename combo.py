@@ -1,18 +1,3 @@
-from keras.layers import Activation, Convolution2D, Dropout, Conv2D
-from keras.layers import AveragePooling2D, BatchNormalization
-from keras.layers import GlobalAveragePooling2D
-from keras.models import Sequential
-from keras.layers import Flatten
-from keras.models import Model
-from keras.layers import Input
-from keras.layers import MaxPooling2D
-from keras.layers import SeparableConv2D
-from keras import layers
-from keras.regularizers import l2
-from keras.callbacks import CSVLogger, ModelCheckpoint, EarlyStopping
-from keras.callbacks import ReduceLROnPlateau
-from keras.preprocessing.image import ImageDataGenerator
-from sklearn.model_selection import train_test_split
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
@@ -88,8 +73,8 @@ def main():
             emotion_probability = np.max(preds)
             label = EMOTIONS[preds.argmax()]
             index = EMOTIONS.index(label)
-            print("label is",label)
-            print("index is",index)
+            #print("label is",label)
+            #print("index is",index)
             limits[index]+=1
             if(limits[index]>=15):
                 limits[index]=0
@@ -215,6 +200,7 @@ for i in range(len(final_result)):
         report[EMOTIONS[i]] = final_result[i]
 
 s=''
+win_text=''
 for key,val in report.items():
     if(key=='angry' and val>=5):
         s1='''
@@ -232,6 +218,8 @@ for key,val in report.items():
         '''
         s1=s1.strip()
         s+=s1+ '\n'
+        if win_text=='':
+            win_text = 'You have been angry for a significant time during this work session.Think back what it was that made you lose your temper.'
         
     elif(key=='disgust' and val>=5):
         s1='''
@@ -248,6 +236,9 @@ for key,val in report.items():
         '''
         s1=s1.strip()
         s+=s1 + '\n'
+
+        if win_text=='':
+            win_text = 'Feeling disgust for something, or worse, someone, is one of the most difficult emotional states for anyone to control.'
         
     elif(key=='fear' and val>=5):
         s1='''
@@ -268,6 +259,10 @@ for key,val in report.items():
         '''
         s1=s1.strip()
         s+=s1 + '\n'
+
+        if win_text=='':
+
+            win_text = 'Based on this session, a feeling of anxiety and fear was captured for a significant amount of time.Think carefully what could the reason be.'
     elif(key=='happy' and val<5):
         s1='''
             Statistics prove that being happy while working is something most succesful people have in common.The signs of happiness detected in this session were less than the average value.
@@ -286,6 +281,9 @@ for key,val in report.items():
         '''
         s1=s1.strip()
         s+=s1 + '\n'
+
+        if win_text=='':
+            win_text = 'Statistics prove that being happy while working is something most succesful people have in common.The signs of happiness detected in this session were less than the average value.'
     elif(key=='sad' and val>=5):
         s1='''
             Being sad is a normal part of life. It may come as a result of environmental factors. You facial expressions indicated sadness during this session.
@@ -303,6 +301,8 @@ for key,val in report.items():
         '''
         s1=s1.strip()
         s+=s1 + '\n'
+        
+        win_text='Being sad is a normal part of life. It may come as a result of environmental factors. You facial expressions indicated sadness during this session.'
 
     elif(flag==1):
         s1='''
@@ -320,6 +320,8 @@ for key,val in report.items():
         s1=s1.strip()
         s+=s1+'\n'
 
+        win_text='You have shown signs of sleepiness in this work session.This will have a negative impact in your overall work performance.'
+
         
       
 
@@ -327,8 +329,12 @@ newresult=[]
 for item in final_result:
     newresult.append(item+1)
 
+print(newresult[:-1])
+print(EMOTIONS[:-1])
+
+
 fig1, ax1 = plt.subplots()
-ax1.pie(newresult, labels=EMOTIONS, autopct='%1.1f%%',
+ax1.pie(newresult[:-1], labels=EMOTIONS[:-1], autopct='%1.1f%%',
         shadow=True, startangle=90)
 ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 plt.savefig('report.pdf')
@@ -339,13 +345,15 @@ file = open('report.txt','w')
 file.write(s2)
 file.close() 
       
-image = np.zeros((1024,1024,3), np.uint8)
+image = np.zeros((1024,2048,3), np.uint8)
 cv2.putText(image,'Report:',(30,20), cv2.FONT_HERSHEY_SIMPLEX, 1,(255,255,255),1,cv2.LINE_AA)
-cv2.putText(image,'Hope you had a productive work session.Refer the report.pdf and report.txt files to get a detailed insight',(30,50), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),1,cv2.LINE_AA)
+cv2.putText(image,win_text,(30,50), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),1,cv2.LINE_AA)
+cv2.putText(image,'Hope you had a productive work session.Refer the report.pdf and report.txt files to get a detailed insight',(30,80), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(255,255,255),1,cv2.LINE_AA)
+
 cv2.imshow('report', image)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-print(report)
+#print(report)
 
 
 

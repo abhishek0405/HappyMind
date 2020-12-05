@@ -1,0 +1,13 @@
+numpy==1.19.4
+opencv-python==4.4.0.46
+Pillow==8.0.1
+tensorflow==2.0.0
+pyttsx3==2.88
+pandas==0.25.1
+scikit-learn==0.20.4
+matplotlib==2.2.5
+fpdf==1.7.2
+imutils==0.5.3
+
+
+
