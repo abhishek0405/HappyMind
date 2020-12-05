@@ -43,7 +43,22 @@ Get the report of your mental state and tips to improve your lifestyle!
 
 ###Demo screenshots
 
-<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/"></p>
+Disgust and frustration:
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/disgust.jpeg"></p>
+<br>
+Drowsy
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/drowsy.jpeg"></p>
+<br>
+Happy
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/happy.jpeg"></p>
+<br>
+Mental state chart
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/piechart.jpeg"></p>
+<br>
+Mental state report and suggestions for healthy lifestyle
+<p  align="center"><img height= "400" width = "800" src = "https://github.com/abhishek0405/NeuralHack/blob/master/images/report.jpeg"></p>
+<br>
+
 
 ### Built With 
 -	Python
