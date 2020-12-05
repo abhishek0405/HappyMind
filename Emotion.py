@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 from keras.layers import Activation, Convolution2D, Dropout, Conv2D
 from keras.layers import AveragePooling2D, BatchNormalization
 from keras.layers import GlobalAveragePooling2D
@@ -29,116 +23,6 @@ from tensorflow.keras.models import load_model
 import numpy as np
 
 
-# In[ ]:
-
-
-def emotion_network(input_shape, num_classes, l2_regularization=0.01):
-    regularization = l2(l2_regularization)
-
-    img_input = Input(input_shape)
-    x = Conv2D(8, (3, 3), strides=(1, 1), kernel_regularizer=regularization,
-                                            use_bias=False)(img_input)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = Conv2D(8, (3, 3), strides=(1, 1), kernel_regularizer=regularization,
-                                            use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-
- 
-    residual = Conv2D(16, (1, 1), strides=(2, 2),
-                      padding='same', use_bias=False)(x)
-    residual = BatchNormalization()(residual)
-
-    x = SeparableConv2D(16, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = SeparableConv2D(16, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
-    x = layers.add([x, residual])
-
-
-    residual = Conv2D(32, (1, 1), strides=(2, 2),
-                      padding='same', use_bias=False)(x)
-    residual = BatchNormalization()(residual)
-
-    x = SeparableConv2D(32, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = SeparableConv2D(32, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
-    x = layers.add([x, residual])
-
-
-    residual = Conv2D(64, (1, 1), strides=(2, 2),
-                      padding='same', use_bias=False)(x)
-    residual = BatchNormalization()(residual)
-
-    x = SeparableConv2D(64, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = SeparableConv2D(64, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
-    x = layers.add([x, residual])
-
-
-    residual = Conv2D(128, (1, 1), strides=(2, 2),
-                      padding='same', use_bias=False)(x)
-    residual = BatchNormalization()(residual)
-
-    x = SeparableConv2D(128, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Activation('relu')(x)
-    x = SeparableConv2D(128, (3, 3), padding='same',
-                        kernel_regularizer=regularization,
-                        use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    x = MaxPooling2D((3, 3), strides=(2, 2), padding='same')(x)
-    x = layers.add([x, residual])
-
-    x = Conv2D(num_classes, (3, 3),
-            #kernel_regularizer=regularization,
-            padding='same')(x)
-    x = GlobalAveragePooling2D()(x)
-    output = Activation('softmax',name='predictions')(x)
-
-    model = Model(img_input, output)
-    return model
-
-
-# In[ ]:
-
-
-def setup_model():
-    model = emotion_network((48,48,1),7)
-    model.compile(optimizer='adam', loss='categorical_crossentropy',metrics=['accuracy'])
-    model.load_weights('_mini_XCEPTION.102-0.66.hdf5')
-    return model
-
-
-# In[ ]:
-
 
 def main():
 
@@ -148,17 +32,16 @@ def main():
     
     face_detection = cv2.CascadeClassifier(detection_model_path)
     emotion_classifier = load_model(emotion_model_path, compile=False)
-    EMOTIONS = ["angry" ,"disgust","fear", "happy", "neutral", "sad",
-     "surprise"]
-
-
+    EMOTIONS = ["angry" ,"disgust","fear", "happy", "neutral", "sad","surprise"]
+    limits= [0,0,0,0,0,0,0]
+    FINAL_COUNTS= [0,0,0,0,0,0,0]
     
     cv2.namedWindow('your_face')
     camera = cv2.VideoCapture(0)
     while True:
         frame = camera.read()[1]
        
-        frame = imutils.resize(frame,width=300)
+        
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_detection.detectMultiScale(gray,scaleFactor=1.1,minNeighbors=5,minSize=(30,30),flags=cv2.CASCADE_SCALE_IMAGE)
 
@@ -179,6 +62,13 @@ def main():
             preds = emotion_classifier.predict(roi)[0]
             emotion_probability = np.max(preds)
             label = EMOTIONS[preds.argmax()]
+            index = EMOTIONS.index(label)
+            print("label is",label)
+            print("index is",index)
+            limits[index]+=1
+            if(limits[index]>=15):
+                limits[index]=0
+                FINAL_COUNTS[index]+=1
         else: continue
 
 
@@ -191,31 +81,32 @@ def main():
 
                     w = int(prob * 300)
                     cv2.rectangle(canvas, (7, (i * 35) + 5),(w, (i * 35) + 35), (0, 0, 255), -1)
-                    cv2.putText(canvas, text, (10, (i * 35) + 23),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.45,
-                    (255, 255, 255), 2)
-                    cv2.putText(frameClone, label, (fX, fY - 10),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
-                    cv2.rectangle(frameClone, (fX, fY), (fX + fW, fY + fH),
-                                  (0, 0, 255), 2)
+                    cv2.putText(canvas, text, (10, (i * 35) + 23),cv2.FONT_HERSHEY_SIMPLEX, 0.45,(255, 255, 255), 2)
+                    cv2.putText(frameClone, label, (fX, fY - 10),cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+                    cv2.rectangle(frameClone, (fX, fY), (fX + fW, fY + fH),(0, 0, 255), 2)
 
 
         cv2.imshow('your_face', frameClone)
         cv2.imshow("Probabilities", canvas)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+        
 
     camera.release()
     cv2.destroyAllWindows()
+    return FINAL_COUNTS
+
+final_result=main()
+EMOTIONS = ["angry" ,"disgust","fear", "happy", "neutral", "sad","surprise"]
+report={}
+for i in range(len(final_result)):
+    if(EMOTIONS[i]=="surprise"):
+        pass
+    else:
+        report[EMOTIONS[i]] = final_result[i]
+print(report)
 
 
-# In[ ]:
-
-
-main()
-
-
-# In[ ]:
 
 
 
