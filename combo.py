@@ -46,7 +46,7 @@ def main():
     camera = cv2.VideoCapture(0)
     while True:
         frame = camera.read()[1]
-        height,width = frame.shape[:2]
+        #height,width = frame.shape[:2]
        
         #frame = imutils.resize(frame,width=300)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -137,7 +137,7 @@ def main():
         if sleep_count < 0:
             sleep_count=0
         
-        cv2.putText(frame,'Sleep count:'+str(sleep_count),(100,height-20), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),1,cv2.LINE_AA)
+        cv2.putText(frame,'Sleep count:'+str(sleep_count),(100,400-20), cv2.FONT_HERSHEY_SIMPLEX, 1,(0,0,255),1,cv2.LINE_AA)
 
     
         if sleep_count >= 30:
