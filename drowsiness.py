@@ -23,7 +23,7 @@ reye = cv2.CascadeClassifier('Haarcascades\haarcascade_righteye_2splits.xml')
 
 
 model = load_model('models/drowsy1.h5')
-
+x=10
 cap = cv2.VideoCapture(0)
 
 sleep_count=0
