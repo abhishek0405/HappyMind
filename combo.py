@@ -81,7 +81,7 @@ def main():
                 FINAL_COUNTS[index]+=1
         else: continue
 
-
+        #Emotion recognition
         for (i, (emotion, prob)) in enumerate(zip(EMOTIONS, preds)):
                     
                     text = "{}: {:.2f}%".format(emotion, prob * 100)
@@ -101,7 +101,8 @@ def main():
 
         #for (x,y,w,h) in faces1:
             #cv2.rectangle(frame, (x,y) , (x+w,y+h) , (255,0,0) , 1 )
-
+        
+        #drowsiness detection
         for (x,y,w,h) in right_eyes:
             right_eye=frame[y:y+h,x:x+w]
         
